@@ -29,6 +29,9 @@ $(BINDIR)/$(EXEC): $(OBJ)
  
 $(OBJDIR)/%.o: $(SRCDIR)/%.cpp
 	$(CXX) -c -o $@ $< $(CFLAGS)
+
+test: $(BINDIR)/$(EXEC)
+	./bin/isoplotter
  
 clean:
 	rm -vf $(BINDIR)/$(EXEC) $(OBJ)
