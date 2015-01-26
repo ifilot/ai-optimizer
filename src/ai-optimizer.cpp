@@ -7,8 +7,15 @@
 
 #define PI 3.141527
 
-double func(double x, double y) {
+double func(double x, double y, bool moat = false) {
     const double sigma = 10.0f;
+
+    if(moat) {
+      if((x > 2.0*PI && x < 3.0*PI) || (y > 2.0*PI && y < 3.0*PI)) {
+        return 0;
+      }
+    }
+
     if(x < 0 || y < 0 || x > 4*PI || y > 4*PI) {
         return 0;
     } else {
@@ -85,6 +92,7 @@ Color hsv_to_rgb(double h, double s, double v) {
 
 int main() {
     srand (time(NULL));
+    bool flag_moat = true;
 
     const unsigned int tx = 1000;
     const unsigned int ty = 1000;
@@ -114,7 +122,7 @@ int main() {
             double _x = j * dx + min_x;
             double _y = i * dy + min_y;
 
-            scalar_field.push_back(func(_x, _y));
+            scalar_field.push_back(func(_x, _y, flag_moat));
             ms.set_value(j, i, &scalar_field.back() );
             Color rgb = hsv_to_rgb(scalar_field.back() * 25.0, 1, 1);
             doc << svg::Rectangle(svg::Point(_x*ratio - squaresize / 2.0, _y*ratio - squaresize / 2.0), squaresize+1, squaresize+1, svg::Color(rgb.x * 255, rgb.y * 255, rgb.z * 255));
@@ -126,7 +134,7 @@ int main() {
     double y = get_random_number(0,1);
     double try_x = 0;
     double try_y = 0;
-    double est = func(x,y);
+    double est = func(x,y, flag_moat);
     double old_est = 0, diff = 0;
     double variation = 1.00;
     double beta = 0.0001;
@@ -153,7 +161,7 @@ int main() {
                 } while(try_y < 0 || try_y > 4*PI);
                 try_x = x;
             }
-            est = func(try_x, try_y);
+            est = func(try_x, try_y, flag_moat);
 
             if(output) std::cout << "Checking:\t" << try_x << "," << try_y << " (" << est << ")" << std::endl;
 
@@ -215,7 +223,7 @@ int main() {
                 } while(try_y < 0 || try_y > 4*PI);
                 try_x = x;
             }
-            est = func(try_x, try_y);
+            est = func(try_x, try_y, flag_moat);
 
             if(output) std::cout << "Checking:\t" << try_x << "," << try_y << " (" << est << ")" << std::endl;
 
@@ -248,7 +256,7 @@ int main() {
 
         if(output) std::cout << "Current value:\t" << x << "," << y << std::endl;
 
-        doc << svg::Circle(svg::Point(x*ratio, y*ratio), 3.0, svg::Color(0,255,0));
+        doc << svg::Circle(svg::Point(x*ratio, y*ratio), 3.0, svg::Color(0,0,255));
     }
 
     std::cout << "Acceptance: " << (float)accept / (float)nr_iter << std::endl;
