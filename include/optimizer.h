@@ -5,6 +5,7 @@
 #include <time.h>       /* time */
 #include <iostream>
 #include <math.h>
+#include "trial_function.h"
 
 #define PI 3.141527
 
@@ -14,8 +15,10 @@ private:
 public:
   Optimizer();
   void set_function(double (*func_ptr)(double, double, bool));
+  //virtual void run();
+  void set_output(const bool &flag);
 protected:
-  double (*func_ptr)(double, double, bool); // pointer to function
+  double (TrialFunction::*func_ptr)(double, double, bool); // pointer to function
   double get_random_number(double min, double max);
   bool flag_moat;
   bool output;

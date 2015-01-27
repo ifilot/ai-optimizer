@@ -4,28 +4,13 @@
 #include "marching_squares.h"
 #include "svg.h"
 #include "mcmc.h"
+#include "trial_function.h";
 
 #define PI 3.141527
 
-double func(double x, double y, bool moat = false) {
-    const double sigma = 10.0f;
-
-    if(moat) {
-      if((x > 2.0*PI && x < 3.0*PI) || (y > 2.0*PI && y < 3.0*PI)) {
-        return 0;
-      }
-    }
-
-    if(x < 0 || y < 0 || x > 4*PI || y > 4*PI) {
-        return 0;
-    } else {
-        return pow(sin(x),2.0)*pow(sin(y),2.0)*exp((x+y)/sigma);
-    }
-}
-
 int main() {
 
-  bool flag_moat = false;
+  TrialFunction tf(false);
 
   const unsigned int tx = 1000;
   const unsigned int ty = 1000;
@@ -55,14 +40,18 @@ int main() {
           double _x = j * dx + min_x;
           double _y = i * dy + min_y;
 
-          colorscheme::Color rgb = scheme.get_color(func(_x, _y, flag_moat));
+          colorscheme::Color rgb = scheme.get_color(tf.calc(_x, _y));
           doc << svg::Rectangle(svg::Point(_x*ratio - squaresize / 2.0, _y*ratio - squaresize / 2.0), squaresize+1, squaresize+1, svg::Color(rgb.get_r(), rgb.get_g(), rgb.get_b()));
       }
   }
 
   MCMC opt;
-  opt.set_function(func);
+  opt.set_function(tf.calc(double, double, double));
+  opt.set_parameters(1000, 0.0001, 1.0);
+  opt.set_output(false); // suppress output
   opt.run();
+
+  std::cout << "Best result: " << opt.get_x() << "," << opt.get_y() << std::endl;
 
   doc.save();
 

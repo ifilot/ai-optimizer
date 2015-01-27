@@ -2,23 +2,32 @@
 
 MCMC::MCMC() {
   this->init(); // get this from parent class
-  this->best_x = 0;
-  this->best_y = 0;
-  this->best_est = 0.0;
+
   this->try_x = 0;
   this->try_y = 0;
+  this->best_x = 0;
+  this->best_y = 0;
+
   this->old_est = 0;
+  this->best_est = 0.0;
   this->diff = 0;
+
   this->variation = 1.00;
   this->beta = 0.0001;
-  this->accept = 0;
+  
   this->nr_iter = 100;
+
+  this->accept = 0;
+}
+
+void MCMC::set_parameters(const unsigned int &_nr_iter, const double &_beta, const double &_variation) {
+  this->nr_iter = _nr_iter;
+  this->beta = _beta;
+  this->variation = _variation;
 }
 
 void MCMC::run() {
   // Start performing MCMC algorithm
-  this->flag_moat = false;
-  this->output = true;
   this->x = this->get_random_number(0,1);
   this->y = this->get_random_number(0,1);
   
@@ -74,4 +83,20 @@ void MCMC::iteration(const unsigned int &iter_nr) {
     }
 
     if(output) std::cout << "Current value:\t" << x << "," << y << std::endl;
+}
+
+const double& MCMC::get_x() const {
+  return this->x;
+}
+
+const double& MCMC::get_y() const {
+  return this->y;
+}
+
+const double& MCMC::get_x_best() const {
+  return this->best_x;
+}
+
+const double& MCMC::get_y_best() const {
+  return this->best_y;
 }
