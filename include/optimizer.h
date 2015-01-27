@@ -14,16 +14,15 @@ private:
 
 public:
   Optimizer();
-  void set_function(double (*func_ptr)(double, double, bool));
-  //virtual void run();
+  void set_function(TrialFunction &_fptr);
   void set_output(const bool &flag);
 protected:
-  double (TrialFunction::*func_ptr)(double, double, bool); // pointer to function
   double get_random_number(double min, double max);
   bool flag_moat;
   bool output;
   void init();
   unsigned int nr_iter;
+  TrialFunction *fptr;
 };
 
 #endif //_OPTIMIZER_H

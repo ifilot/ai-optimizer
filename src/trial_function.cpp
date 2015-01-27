@@ -5,7 +5,7 @@ TrialFunction::TrialFunction(const bool &flag) {
   this->moat = flag;
 }
 
-double calc(const double &x, const double &y) {
+double TrialFunction::calc(const double &x, const double &y) {
   if(moat) {
     if((x > 2.0*PI && x < 3.0*PI) || (y > 2.0*PI && y < 3.0*PI)) {
       return 0;

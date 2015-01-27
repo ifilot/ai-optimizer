@@ -51,7 +51,7 @@ void MCMC::iteration(const unsigned int &iter_nr) {
             } while(try_y < 0 || try_y > 4*PI);
             try_x = x;
         }
-        est = this->func_ptr(try_x, try_y, this->flag_moat);
+        est = this->fptr->calc(try_x, try_y);
 
         if(output) std::cout << "Checking:\t" << try_x << "," << try_y << " (" << est << ")" << std::endl;
 

@@ -4,7 +4,7 @@
 #include "marching_squares.h"
 #include "svg.h"
 #include "mcmc.h"
-#include "trial_function.h";
+#include "trial_function.h"
 
 #define PI 3.141527
 
@@ -46,7 +46,7 @@ int main() {
   }
 
   MCMC opt;
-  opt.set_function(tf.calc(double, double, double));
+  opt.set_function(tf);
   opt.set_parameters(1000, 0.0001, 1.0);
   opt.set_output(false); // suppress output
   opt.run();

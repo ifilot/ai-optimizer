@@ -4,8 +4,8 @@ Optimizer::Optimizer() {
   this->init();
 }
 
-void Optimizer::set_function(double (*_func_ptr)(double, double, bool)) {
-  this->func_ptr = _func_ptr;
+void Optimizer::set_function(TrialFunction &_fptr) {
+  this->fptr = &_fptr;
 }
 
 void Optimizer::set_output(const bool &flag) {
