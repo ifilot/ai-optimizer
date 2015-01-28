@@ -63,6 +63,7 @@ void MCMC::iteration(const unsigned int &iter_nr) {
             y = try_y;
             accept++;
             old_est = est;
+            this->store();
             if(output) std::cout << "This state was accepted" << std::endl;
         } else if(chance < roll) {
             x = try_x;
@@ -70,6 +71,7 @@ void MCMC::iteration(const unsigned int &iter_nr) {
             accept++;
             if(output) std::cout << "Chance = " << (1.0-chance) << "\t" << "Roll = " << roll << std::endl;
             old_est = est;
+            this->store();
         } else {
             if(output) std::cout << "This state was rejected" << std::endl;
         }
@@ -99,4 +101,11 @@ const double& MCMC::get_x_best() const {
 
 const double& MCMC::get_y_best() const {
   return this->best_y;
+}
+
+void MCMC::store() {
+  // store results
+  this->output_x.push_back(this->x);
+  this->output_y.push_back(this->y);
+  this->output_value.push_back(this->est);
 }

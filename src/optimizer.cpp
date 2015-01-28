@@ -12,6 +12,18 @@ void Optimizer::set_output(const bool &flag) {
   this->output = flag;
 }
 
+const unsigned int Optimizer::get_iterations() const {
+  return this->output_x.size();
+}
+
+const double& Optimizer::get_output_x(const unsigned int &i) {
+  return this->output_x[i];
+}
+
+const double& Optimizer::get_output_y(const unsigned int &i) {
+  return this->output_y[i];
+}
+
 void run() {
 
 }

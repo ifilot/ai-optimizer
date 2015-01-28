@@ -1,7 +1,4 @@
-#include <cstdlib>
-#include <math.h>
 #include "color_scheme.h"
-#include "marching_squares.h"
 #include "svg.h"
 #include "mcmc.h"
 #include "trial_function.h"
@@ -47,9 +44,13 @@ int main() {
 
   MCMC opt;
   opt.set_function(tf);
-  opt.set_parameters(1000, 0.0001, 1.0);
+  opt.set_parameters(6000, 1e-5, 0.95);
   opt.set_output(false); // suppress output
   opt.run();
+
+  for(unsigned int i=0; i<=opt.get_iterations(); i++) {
+    doc << svg::Circle(svg::Point(opt.get_output_x(i)*ratio, opt.get_output_y(i)*ratio), 15.0, svg::Color(0,0,0), svg::Stroke(1.0, svg::Color(255,255,255)));
+  }
 
   std::cout << "Best result: " << opt.get_x() << "," << opt.get_y() << std::endl;
 

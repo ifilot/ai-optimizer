@@ -31,6 +31,7 @@ public:
   const double& get_y_best() const;
 private:
   void iteration(const unsigned int &iter_nr);
+  void store();
 };
 
 #endif //_MCMC_H
