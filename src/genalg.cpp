@@ -75,6 +75,7 @@ void GeneticAlgorithm::iteration() {
   for(unsigned int i=0; i<size; i++) {
     this->create_new_chromosome(i);
   }
+  this->sort_by_fitness();
 }
 
 void GeneticAlgorithm::print_gene_pool() {
@@ -83,4 +84,19 @@ void GeneticAlgorithm::print_gene_pool() {
     this->chromosomes[i].get_y() << "\tFitness = " << this->chromosomes[i].get_fitness() 
     << std::endl;
   }
+}
+
+void GeneticAlgorithm::sort_by_fitness() {
+  while(this->bubble_sort() != 0);
+}
+
+unsigned int GeneticAlgorithm::bubble_sort() {
+  unsigned int nr_swap = 0;
+  for(unsigned int i=0; i<this->chromosomes.size() - 1; i++) {
+    if(this->chromosomes[i].get_fitness() < this->chromosomes[i+1].get_fitness()) { // swap them
+      std::iter_swap(this->chromosomes.begin() + i, this->chromosomes.begin() + i + 1);
+      nr_swap++;
+    }
+  }
+  return nr_swap;
 }

@@ -1,6 +1,7 @@
 #ifndef _GENALG_H
 #define _GENALG_H
 
+#include <algorithm>
 #include "optimizer.h"
 #include "trial_function.h"
 
@@ -32,6 +33,9 @@ private:
   void genesis(); // create gene 0
   void create_new_chromosome(const unsigned int &_parent_id);
   void iteration();
+  void natural_selection();
+  void sort_by_fitness();
+  unsigned int bubble_sort();
 };
 
 #endif //_GENALG_H

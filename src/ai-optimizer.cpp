@@ -33,15 +33,15 @@ int main() {
   std::vector<double> scalar_field;
   colorscheme::ColorScheme scheme(0.0, 4.0);
 
-  for(unsigned int i=0; i<=sy; i++) {
-      for(unsigned int j=0; j<=sx; j++) {
-          double _x = j * dx + min_x;
-          double _y = i * dy + min_y;
+  // for(unsigned int i=0; i<=sy; i++) {
+  //     for(unsigned int j=0; j<=sx; j++) {
+  //         double _x = j * dx + min_x;
+  //         double _y = i * dy + min_y;
 
-          colorscheme::Color rgb = scheme.get_color(tf.calc(_x, _y));
-          doc << svg::Rectangle(svg::Point(_x*ratio - squaresize / 2.0, _y*ratio - squaresize / 2.0), squaresize+1, squaresize+1, svg::Color(rgb.get_r(), rgb.get_g(), rgb.get_b()));
-      }
-  }
+  //         colorscheme::Color rgb = scheme.get_color(tf.calc(_x, _y));
+  //         doc << svg::Rectangle(svg::Point(_x*ratio - squaresize / 2.0, _y*ratio - squaresize / 2.0), squaresize+1, squaresize+1, svg::Color(rgb.get_r(), rgb.get_g(), rgb.get_b()));
+  //     }
+  // }
 
   // MCMC opt;
   // opt.set_function(tf);
