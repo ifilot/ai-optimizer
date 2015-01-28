@@ -3,7 +3,7 @@
 
 #include "optimizer.h"
 
-class MCMC : public Optimizer{ // Markov Chain Monte Carlo
+class MCMC : public Optimizer { // Markov Chain Monte Carlo
 private:
   double x;     // current x value
   double y;     // current y value
