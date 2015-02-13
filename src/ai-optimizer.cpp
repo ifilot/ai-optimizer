@@ -15,10 +15,10 @@ int main() {
   const unsigned int ty = 1000;
 
   Plotter plt(tx, ty);
-  colorscheme::ColorScheme scheme(0,10);
+  colorscheme::ColorScheme scheme(0,8);
 
-  const unsigned int sx = 250;
-  const unsigned int sy = 250;
+  const unsigned int sx = 1000;
+  const unsigned int sy = 1000;
 
   const double min_x = 0.0;
   const double max_x = 4 * PI;
@@ -50,16 +50,17 @@ int main() {
   // opt.set_output(false); // suppress output
   // opt.run();
 
-  // for(unsigned int i=0; i<=opt.get_iterations(); i++) {
-  //   doc << svg::Circle(svg::Point(opt.get_output_x(i)*ratio, opt.get_output_y(i)*ratio), 15.0, svg::Color(0,0,0), svg::Stroke(1.0, svg::Color(255,255,255)));
-  // }
-
   //std::cout << "Best result: " << opt.get_x() << "," << opt.get_y() << std::endl;
 
   GeneticAlgorithm genalg;
   genalg.set_function(tf);
   genalg.run();
   genalg.print_gene_pool();
+
+  for(unsigned int i=0; i <= genalg.get_iterations(); i++) {
+    plt.draw_filled_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(0,0,0));
+    plt.draw_empty_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(255,255,255), 1.0);
+  }
 
   plt.write("test.png");
 
