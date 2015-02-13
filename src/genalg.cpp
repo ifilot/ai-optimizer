@@ -32,13 +32,13 @@ void Chromosome::mutate(const float& _variation) {
   if(this->get_random_number(0,1) > 0.5) { // vary x
     do {
       d = get_random_number(-_variation, _variation);
-    } while(this->x + d < 0);
+    } while(this->x + d < 0 || this->x + d > 4 * PI);
     this->x += d;
   } else { //vary y
     do {
       d = get_random_number(-_variation, _variation);
-    } while(this->y + d < 0);
-    y += d;
+    } while(this->y + d < 0 || this->y + d > 4 * PI);
+    this->y += d;
   }
 }
 
@@ -52,8 +52,9 @@ GeneticAlgorithm::GeneticAlgorithm() { // start with the generation 0 chromosome
 
 void GeneticAlgorithm::genesis() {
   this->chromosomes.push_back(Chromosome(this->get_random_number(0,1), this->get_random_number(0,1)));
-  this->max_nr_chromosomes = 4;
-  this->variation = 0.9;
+  this->max_nr_chromosomes = 32;
+  this->variation = 3;
+  this->rank_chance = 0.95;
   this->chromosomes.back().calculate_fitness(this->fptr);
 }
 
@@ -65,12 +66,29 @@ void GeneticAlgorithm::create_new_chromosome(const unsigned int &_parent_id) {
 
 void GeneticAlgorithm::run() {
   this->genesis();
-  this->iteration();
-  this->iteration();
-  this->iteration();
-  this->iteration();
-  this->iteration();
-  this->iteration();
+  for(unsigned int i=0; i<50; i++) {
+    this->iteration();
+    this->store_genes();
+  }
+}
+
+void GeneticAlgorithm::natural_selection() {
+  if(this->chromosomes.size() < max_nr_chromosomes) {
+    return;
+  }
+
+  std::vector<Chromosome> new_gene_pool;
+  float chance = this->rank_chance;
+
+  for(unsigned int i=0; i<this->chromosomes.size(); i++) {
+    if(new_gene_pool.size() == 0 && i == this->chromosomes.size()-1) {
+      new_gene_pool.push_back(this->chromosomes[i]);
+    } else if(this->get_random_number(0,1) < chance) {
+      new_gene_pool.push_back(this->chromosomes[i]);
+    }
+    chance *= this->rank_chance;
+  }
+  this->chromosomes = new_gene_pool;
 }
 
 void GeneticAlgorithm::iteration() {
@@ -79,6 +97,7 @@ void GeneticAlgorithm::iteration() {
     this->create_new_chromosome(i);
   }
   this->sort_by_fitness();
+  this->natural_selection();
 }
 
 void GeneticAlgorithm::print_gene_pool() {
@@ -102,4 +121,12 @@ unsigned int GeneticAlgorithm::bubble_sort() {
     }
   }
   return nr_swap;
+}
+
+void GeneticAlgorithm::store_genes() {
+  for(unsigned int i=0; i<this->chromosomes.size(); i++)  {
+    this->output_x.push_back(this->chromosomes[i].get_x() );
+    this->output_y.push_back(this->chromosomes[i].get_y() );
+    this->output_value.push_back(this->chromosomes[i].get_fitness() );
+  }
 }

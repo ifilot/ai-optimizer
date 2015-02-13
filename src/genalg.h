@@ -25,6 +25,7 @@ private:
   std::vector<Chromosome> chromosomes;
   unsigned int max_nr_chromosomes;
   float variation;
+  float rank_chance;
 public:
   GeneticAlgorithm();
   void run();
@@ -35,6 +36,7 @@ private:
   void iteration();
   void natural_selection();
   void sort_by_fitness();
+  void store_genes();
   unsigned int bubble_sort();
 };
 
