@@ -3,6 +3,7 @@
 #include "mcmc.h"
 #include "genalg.h"
 #include "trial_function.h"
+#include "plotter.h"
 
 #define PI 3.141527
 
@@ -13,8 +14,8 @@ int main() {
   const unsigned int tx = 1000;
   const unsigned int ty = 1000;
 
-  svg::Dimensions dimensions(tx, ty);
-  svg::Document doc("graph.svg", svg::Layout(dimensions, svg::Layout::BottomLeft));
+  Plotter plt(tx, ty);
+  colorscheme::ColorScheme scheme(0,10);
 
   const unsigned int sx = 250;
   const unsigned int sy = 250;
@@ -31,17 +32,17 @@ int main() {
   const double dy = (max_y - min_y) / (double)sy;
 
   std::vector<double> scalar_field;
-  colorscheme::ColorScheme scheme(0.0, 4.0);
 
-  // for(unsigned int i=0; i<=sy; i++) {
-  //     for(unsigned int j=0; j<=sx; j++) {
-  //         double _x = j * dx + min_x;
-  //         double _y = i * dy + min_y;
+  // draw contour plot
+  for(unsigned int i=0; i<=sy; i++) {
+      for(unsigned int j=0; j<=sx; j++) {
+          double _x = j * dx + min_x;
+          double _y = i * dy + min_y;
 
-  //         colorscheme::Color rgb = scheme.get_color(tf.calc(_x, _y));
-  //         doc << svg::Rectangle(svg::Point(_x*ratio - squaresize / 2.0, _y*ratio - squaresize / 2.0), squaresize+1, squaresize+1, svg::Color(rgb.get_r(), rgb.get_g(), rgb.get_b()));
-  //     }
-  // }
+          colorscheme::Color rgb = scheme.get_color(tf.calc(_x, _y));
+          plt.draw_filled_rectangle(_x*ratio - squaresize / 2.0, ty - _y*ratio - squaresize / 2.0, squaresize+1, squaresize+1, rgb);
+      }
+  }
 
   // MCMC opt;
   // opt.set_function(tf);
@@ -60,7 +61,7 @@ int main() {
   genalg.run();
   genalg.print_gene_pool();
 
-  doc.save();
+  plt.write("test.png");
 
   return 0;
 }

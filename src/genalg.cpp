@@ -68,6 +68,9 @@ void GeneticAlgorithm::run() {
   this->iteration();
   this->iteration();
   this->iteration();
+  this->iteration();
+  this->iteration();
+  this->iteration();
 }
 
 void GeneticAlgorithm::iteration() {
