@@ -102,37 +102,51 @@ GeneticAlgorithm::GeneticAlgorithm() { // start with the generation 0 chromosome
 
 void GeneticAlgorithm::genesis() {
   this->chromosomes.push_back(Chromosome(this->get_random_number(0,1), this->get_random_number(0,1)));
-  this->max_nr_chromosomes = 32;
+  this->max_nr_chromosomes = 4;
   this->variation = 3;
   this->rank_chance = 0.95;
   this->chromosomes.back().calculate_fitness(this->fptr);
 }
 
 void GeneticAlgorithm::create_new_chromosome(const unsigned int &_parent_id) {
-  Chromosome* spawn;
+  if(_parent_id > this->chromosomes.size() - 1) {
+    std::cerr << "Trying to allocate chromosome outside bounds" << std::endl;
+    exit(1);
+  }
+
+  Chromosome spawn = this->chromosomes[_parent_id];
   do {
-    spawn = new Chromosome(this->chromosomes[_parent_id]);
-    spawn->mutate(this->variation);  
+    spawn.mutate(this->variation);
   } while(!this->spawn_chromosome(spawn));
 }
 
 void GeneticAlgorithm::mate_chromosomes(const unsigned int &_parent_id1, 
                                         const unsigned int &_parent_id2) {
+  if(_parent_id1 > this->chromosomes.size() - 1) {
+    std::cerr << "Trying to allocate chromosome outside bounds" << std::endl;
+    exit(1);
+  }
+
+  if(_parent_id2 > this->chromosomes.size() - 1) {
+    std::cerr << "Trying to allocate chromosome outside bounds" << std::endl;
+    exit(1);
+  }
+
   Chromosome cr1(this->chromosomes[_parent_id1].get_x(), 
                  this->chromosomes[_parent_id2].get_y());
   Chromosome cr2(this->chromosomes[_parent_id2].get_x(), 
                  this->chromosomes[_parent_id1].get_y());
-  this->spawn_chromosome(&cr1);
-  this->spawn_chromosome(&cr2);
+  this->spawn_chromosome(cr1);
+  this->spawn_chromosome(cr2);
 }
 
-bool GeneticAlgorithm::spawn_chromosome(const Chromosome* spawnling) {
+bool GeneticAlgorithm::spawn_chromosome(Chromosome spawnling) {
   for(unsigned int i=0; i<this->chromosomes.size(); i++) {
-    if(this->chromosomes[i] == *spawnling) {
+    if(this->chromosomes[i] == spawnling) {
       return false;
     }
   }
-  this->chromosomes.push_back(*spawnling);
+  this->chromosomes.push_back(Chromosome(spawnling));
   this->chromosomes.back().calculate_fitness(this->fptr);
   return true;
 }
@@ -162,12 +176,13 @@ void GeneticAlgorithm::natural_selection() {
   std::vector<Chromosome> new_gene_pool;
   float chance = 1.0;
 
-  for(unsigned int i=0; i<this->chromosomes.size(); i++) {
+  for(unsigned int i=0; i<this->chromosomes.size() && new_gene_pool.size() <= this->max_nr_chromosomes; i++) {
     if(this->get_random_number(0,1) < chance) {
       new_gene_pool.push_back(this->chromosomes[i]);
     }
     chance *= this->rank_chance;
   }
+
   this->chromosomes = new_gene_pool; // make the survival chance increasingly smaller
 }
 
@@ -209,11 +224,10 @@ void GeneticAlgorithm::sort_by_fitness() {
 }
 
 void GeneticAlgorithm::sort_by_rank_space() {
-  // first perform a sort by fitness
   while(this->bubble_sort_by_fitness() != 0);
 
   // take the first chromosome and make a copy
-  this->chromosomes[0].set_space_rank(this->chromosomes.size());
+  this->chromosomes[0].set_space_rank(this->chromosomes.size()-1);
   this->chromosomes[0].set_fitness_rank(0);
   for(unsigned int i=1; i<this->chromosomes.size(); i++) {
     this->chromosomes[i].set_space(i, &this->chromosomes);
@@ -231,7 +245,7 @@ void GeneticAlgorithm::sort_by_rank_space() {
 
 unsigned int GeneticAlgorithm::bubble_sort_by_fitness() {
   unsigned int nr_swap = 0;
-  for(unsigned int i=0; i<this->chromosomes.size(); i++) {
+  for(unsigned int i=0; i<this->chromosomes.size() - 1; i++) {
     if(this->chromosomes[i].get_fitness() < this->chromosomes[i+1].get_fitness()) { // swap them
       std::iter_swap(this->chromosomes.begin() + i, this->chromosomes.begin() + i + 1);
       nr_swap++;

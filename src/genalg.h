@@ -48,7 +48,7 @@ private:
   void create_new_chromosome(const unsigned int &_parent_id);
   void mate_chromosomes(const unsigned int &_parent_id1, 
                                         const unsigned int &_parent_id2);
-  bool spawn_chromosome(const Chromosome* spawnling);
+  bool spawn_chromosome(Chromosome spawnling);
   void iteration();
   void natural_selection();
   void sort_by_fitness();

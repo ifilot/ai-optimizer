@@ -1,7 +1,7 @@
 # set compiler and compile options
 EXEC = ai-optimizer
 CXX = g++                                # use the GNU C++ compiler
-OPTS = -O3 -Wall -g -Wno-write-strings   # use some optimization, report all warnings and enable debugging
+OPTS = -O0 -Wall -g -Wno-write-strings   # use some optimization, report all warnings and enable debugging
 CFLAGS = $(OPTS)                         # add compile flags
 LDFLAGS = -lcairo                        # specify link flags here
  
