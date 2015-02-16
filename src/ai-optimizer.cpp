@@ -58,8 +58,14 @@ int main() {
   genalg.print_gene_pool();
 
   for(unsigned int i=0; i <= genalg.get_iterations(); i++) {
-    plt.draw_filled_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(0,0,0));
-    plt.draw_empty_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(255,255,255), 1.0);
+    if(i >= genalg.get_iterations() - genalg.get_nr_chromosomes()) {
+      plt.draw_filled_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(255,0,0));
+      plt.draw_empty_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(255,255,255), 1.0);
+    } else {
+      plt.draw_filled_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(0,0,0));
+      plt.draw_empty_circle(genalg.get_output_x(i)*ratio, ty - genalg.get_output_y(i)*ratio, 7.0, colorscheme::Color(255,255,255), 1.0);
+    }
+    
   }
 
   plt.write("test.png");

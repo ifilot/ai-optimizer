@@ -40,6 +40,7 @@ private:
   float rank_chance;
 public:
   GeneticAlgorithm();
+  unsigned int get_nr_chromosomes() const;
   void run();
   void print_gene_pool();
 private:

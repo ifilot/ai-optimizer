@@ -104,7 +104,7 @@ void GeneticAlgorithm::genesis() {
   this->chromosomes.push_back(Chromosome(this->get_random_number(0,1), this->get_random_number(0,1)));
   this->max_nr_chromosomes = 32;
   this->variation = 3;
-  this->rank_chance = 0.90;
+  this->rank_chance = 0.95;
   this->chromosomes.back().calculate_fitness(this->fptr);
 }
 
@@ -268,4 +268,8 @@ void GeneticAlgorithm::store_genes() {
     this->output_y.push_back(this->chromosomes[i].get_y() );
     this->output_value.push_back(this->chromosomes[i].get_fitness() );
   }
+}
+
+unsigned int GeneticAlgorithm::get_nr_chromosomes() const {
+  return this->chromosomes.size();
 }
