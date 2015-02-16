@@ -9,7 +9,7 @@
 
 int main() {
 
-  TrialFunction tf(false);
+  TrialFunction tf(true);
 
   const unsigned int tx = 1000;
   const unsigned int ty = 1000;
