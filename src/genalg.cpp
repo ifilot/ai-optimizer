@@ -160,12 +160,10 @@ void GeneticAlgorithm::natural_selection() {
   }
 
   std::vector<Chromosome> new_gene_pool;
-  float chance = this->rank_chance;
+  float chance = 1.0;
 
   for(unsigned int i=0; i<this->chromosomes.size(); i++) {
-    if(new_gene_pool.size() == 0 && i == this->chromosomes.size()-1) {
-      new_gene_pool.push_back(this->chromosomes[i]);
-    } else if(this->get_random_number(0,1) < chance) {
+    if(this->get_random_number(0,1) < chance) {
       new_gene_pool.push_back(this->chromosomes[i]);
     }
     chance *= this->rank_chance;
@@ -174,41 +172,19 @@ void GeneticAlgorithm::natural_selection() {
 }
 
 void GeneticAlgorithm::iteration() {
-  unsigned int size = floor(this->chromosomes.size() / 2)+1;
-  //unsigned int size = this->chromosomes.size();
+  unsigned int size = this->chromosomes.size();
 
   for(unsigned int i=0; i<size; i++) {
     this->create_new_chromosome(i);
   }
 
-  // let the members of the pool mate (and exchange chromosomes)
-  // a mate is chosen randomnly
-  std::vector<unsigned int> list(this->chromosomes.size());
-  for(unsigned int i=0; i<this->chromosomes.size(); i++) {
-    list[i] = i;
-  }
-
-  unsigned int r1,r2;
-  unsigned int loopcounter = 0;
-  size = floor(this->chromosomes.size() / 2);
-  for(unsigned int i=0; i<size; i++) {
-    do {
-      r1 = (unsigned int)this->get_random_number(0, list.size() );
-      r2 = (unsigned int)this->get_random_number(0, list.size() ); 
-      //std::cout << r1 << "\t" << r2 << "\t" << list.size() << std::endl; 
-      loopcounter++;
-      if(loopcounter > 10000) {
-        std::cerr << "Too many loops" << std::endl;
-        exit(1);
-      }
-    } while(r1 == r2);
-    this->mate_chromosomes(list[r1], list[r2]);
-    if(r2 > r1) {
-      list.erase (list.begin()+r2);
-      list.erase (list.begin()+r1);
-    } else {
-      list.erase (list.begin()+r1);
-      list.erase (list.begin()+r2);
+  if(size >= 4) {
+    unsigned int r2;
+    for(unsigned int i=0; i<size; i++) {
+      do {
+        r2 = (unsigned int)this->get_random_number(0, size-1); 
+      } while(i == r2);
+      this->mate_chromosomes(i, r2);
     }
   }
 
